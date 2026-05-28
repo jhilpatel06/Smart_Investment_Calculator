@@ -6,6 +6,8 @@ def future_value_monthly_deposit(x, r, t):
 
     balance = 0
 
+    balances = [0]
+
     for month in range(1, months + 1):
 
         # Monthly deposit
@@ -16,8 +18,9 @@ def future_value_monthly_deposit(x, r, t):
 
             balance += balance * annual_rate
 
-    return round(balance, 2)
+        balances.append(balance)
 
+    return round(balance, 2), balances
 
 def calculate_total_invested(monthly_deposit, time_period):
 
@@ -52,41 +55,43 @@ def required_monthly_deposit(
 
     high = monthly_withdrawal * withdrawal_months
 
+    final_balances = []
+
     while high - low > 0.01:
 
         monthly_deposit = (low + high) / 2
 
         balance = 0
 
-        # ----------------------------------------
-        # Investment Phase
-        # ----------------------------------------
+        balances = [0]
 
+        # Investment phase
         for month in range(1, invest_months + 1):
 
             balance += monthly_deposit
 
-            # Annual compounding
             if month % 12 == 0:
 
                 balance += balance * annual_rate
 
-        # ----------------------------------------
-        # Withdrawal Phase
-        # ----------------------------------------
+            balances.append(balance)
 
+        # Withdrawal phase
         for month in range(1, withdrawal_months + 1):
 
-            # Annual compounding
             if month % 12 == 0:
 
                 balance += balance * annual_rate
 
             balance -= monthly_withdrawal
 
+            balances.append(balance)
+
         if balance >= 0:
 
             high = monthly_deposit
+
+            final_balances = balances
 
         else:
 
@@ -113,5 +118,8 @@ def required_monthly_deposit(
         required_deposit,
         total_invested,
         total_withdrawn,
-        total_interest_earned
+        total_interest_earned,
+        final_balances,
+        invest_months,
+        withdrawal_months
     )

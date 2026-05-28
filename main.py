@@ -12,6 +12,11 @@ from utils import (
     display_retirement_results
 )
 
+from plots import (
+    plot_financial_timeline,
+    plot_investment_timeline
+)
+
 
 parser = argparse.ArgumentParser(
     description="Financial Planning Calculator"
@@ -73,7 +78,7 @@ if (
     and args.time_in_years is not None
 ):
 
-    final_amount = future_value_monthly_deposit(
+    final_amount, balances = future_value_monthly_deposit(
         args.monthly_deposit,
         args.rate,
         args.time_in_years
@@ -96,6 +101,8 @@ if (
         args.time_in_years
     )
 
+    plot_investment_timeline(balances)
+
 # --------------------------------------------------
 # Retirement Planning Mode
 # --------------------------------------------------
@@ -105,12 +112,14 @@ elif (
     and args.investment_years is not None
     and args.withdrawal_years is not None
 ):
-
     (
         required_deposit,
         total_invested,
         total_withdrawn,
-        total_interest_earned
+        total_interest_earned,
+        balances,
+        invest_months,
+        withdrawal_months
     ) = required_monthly_deposit(
         annual_rate=args.rate,
         investment_years=args.investment_years,
@@ -125,6 +134,8 @@ elif (
         total_interest_earned
     )
 
-else:
-
-    print("Invalid arguments provided.")
+    plot_financial_timeline(
+        balances,
+        invest_months,
+        withdrawal_months
+    )
