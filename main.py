@@ -7,18 +7,24 @@ from calculator import (
     required_monthly_deposit
 )
 
-from utils import display_results
+from utils import (
+    display_investment_results,
+    display_retirement_results
+)
 
 
 parser = argparse.ArgumentParser(
-    description="Investment and Retirement Calculator"
+    description="Financial Planning Calculator"
 )
 
-# Existing calculator arguments
+# --------------------------------------------------
+# Investment Mode Arguments
+# --------------------------------------------------
+
 parser.add_argument(
     "--monthly_deposit",
     type=float,
-    help="Monthly deposit amount"
+    help="Monthly investment amount"
 )
 
 parser.add_argument(
@@ -34,29 +40,32 @@ parser.add_argument(
     help="Investment duration in years"
 )
 
-# New retirement planning arguments
+# --------------------------------------------------
+# Retirement Planning Arguments
+# --------------------------------------------------
+
 parser.add_argument(
     "--withdrawal_amount",
     type=float,
-    help="Monthly withdrawal amount after retirement"
+    help="Monthly withdrawal amount"
 )
 
 parser.add_argument(
     "--investment_years",
     type=float,
-    help="Years for investment phase"
+    help="Years spent investing"
 )
 
 parser.add_argument(
     "--withdrawal_years",
     type=float,
-    help="Years for withdrawal phase"
+    help="Years spent withdrawing"
 )
 
 args = parser.parse_args()
 
 # --------------------------------------------------
-# Existing SIP calculation
+# Investment Growth Mode
 # --------------------------------------------------
 
 if (
@@ -80,7 +89,7 @@ if (
         total_invested
     )
 
-    display_results(
+    display_investment_results(
         total_invested,
         interest_earned,
         final_amount,
@@ -88,7 +97,7 @@ if (
     )
 
 # --------------------------------------------------
-# Retirement planning calculation
+# Retirement Planning Mode
 # --------------------------------------------------
 
 elif (
@@ -109,24 +118,11 @@ elif (
         monthly_withdrawal=args.withdrawal_amount
     )
 
-    print(
-        f"Required monthly deposit: "
-        f"{required_deposit:.2f}"
-    )
-
-    print(
-        f"Total money invested: "
-        f"{total_invested:.2f}"
-    )
-
-    print(
-        f"Total money withdrawn: "
-        f"{total_withdrawn:.2f}"
-    )
-
-    print(
-        f"Total interest earned: "
-        f"{total_interest_earned:.2f}"
+    display_retirement_results(
+        required_deposit,
+        total_invested,
+        total_withdrawn,
+        total_interest_earned
     )
 
 else:
